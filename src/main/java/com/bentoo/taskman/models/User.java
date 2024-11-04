@@ -1,12 +1,10 @@
 package com.bentoo.taskman.models;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -24,4 +22,7 @@ public class User {
 
     @CreationTimestamp
     public LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "user")
+    private List<Task> tasks;
 }
