@@ -23,6 +23,6 @@ public class User {
     @CreationTimestamp
     public LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;
 }
