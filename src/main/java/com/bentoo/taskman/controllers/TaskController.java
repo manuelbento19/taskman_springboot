@@ -1,4 +1,5 @@
 package com.bentoo.taskman.controllers;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.bentoo.taskman.dto.UserDTO;
 import com.bentoo.taskman.models.User;
 import com.bentoo.taskman.repositories.IUserRepository;
@@ -29,6 +30,8 @@ public class TaskController{
         if (userExists != null) {
             return ResponseEntity.badRequest().body("User already exists");
         }
+        String hashPassword = BCrypt.withDefaults().hashToString(10,data.password.toCharArray());
+        data.password = hashPassword;
         User result = userRepository.save(data);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().build().toUri();
         return ResponseEntity.created(uri).body(result);
