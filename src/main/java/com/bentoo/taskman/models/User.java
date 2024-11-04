@@ -1,7 +1,9 @@
 package com.bentoo.taskman.models;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -11,11 +13,14 @@ import java.util.UUID;
 public class User {
     @Id
     @GeneratedValue(generator = "UUID")
-    public UUID Id;
+    public UUID id;
 
-    private String name;
-    private String email;
-    private String password;
+    @Column
+    public String name;
+
+    @Column
+    public String email;
+    public String password;
 
     @CreationTimestamp
     public LocalDateTime createdAt;
