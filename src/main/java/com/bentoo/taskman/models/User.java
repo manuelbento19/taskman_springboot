@@ -9,16 +9,16 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Data
 @Entity(name="tb_users")
 public class User {
     @Id
     @GeneratedValue(generator = "UUID")
     public UUID id;
 
-    @Column
     public String name;
 
-    @Column
+    @Column(unique = true)
     public String email;
     public String password;
 

@@ -19,12 +19,16 @@ public class TaskController{
 
     @Autowired
     IUserRepository userRepository;
-
     ModelMapper mapper = new ModelMapper();
 
     @PostMapping
-    public ResponseEntity<User> Create(@RequestBody User body){
-        var data = mapper.map(body,User.class);
+    public ResponseEntity Create(@RequestBody UserDTO body) {
+        var data = mapper.map(body, User.class);
+        System.out.println("Mapper: "+data.email);
+        var userExists = userRepository.findByEmail(data.email);
+        if (userExists != null) {
+            return ResponseEntity.badRequest().body("User already exists");
+        }
         User result = userRepository.save(data);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().build().toUri();
         return ResponseEntity.created(uri).body(result);
