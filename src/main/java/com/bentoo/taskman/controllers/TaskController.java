@@ -3,6 +3,7 @@ import com.bentoo.taskman.dto.TaskDTO;
 import com.bentoo.taskman.models.Task;
 import com.bentoo.taskman.repositories.ITaskRepository;
 import com.bentoo.taskman.utils.Utils;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -50,10 +51,13 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> Update(@RequestBody TaskDTO body, @PathVariable UUID id, ServletRequest request){
-        var taskExists = taskRepository.findById(id).orElseThrow();
-        utils.copyNonNullProperties(body,taskExists);
-        var response = taskRepository.save(taskExists);
+    public ResponseEntity Update(@RequestBody TaskDTO body, @PathVariable UUID id, ServletRequest request){
+        var taskExists = taskRepository.findById(id);
+        if(taskExists.isEmpty())
+            return ResponseEntity.badRequest().body("Task doesn't exists");
+
+        utils.copyNonNullProperties(body,taskExists.get());
+        var response = taskRepository.save(taskExists.get());
         return ResponseEntity.ok().body(response);
     }
 }
