@@ -58,6 +58,7 @@ public class AuthMiddleware extends OncePerRequestFilter {
                 response.sendError(401,"User doesn't exists");
                 return;
             }
+            request.setAttribute("userId",userExists.id);
             filterChain.doFilter(request,response);
         }
         filterChain.doFilter(request,response);

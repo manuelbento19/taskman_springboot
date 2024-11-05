@@ -11,5 +11,5 @@ public class TaskDTO {
     private String description;
     private LocalDateTime startedAt;
     private LocalDateTime endAt;
-    private UUID userId;
+    public UUID userId;
 }
