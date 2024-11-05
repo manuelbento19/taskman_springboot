@@ -1,4 +1,6 @@
 package com.bentoo.taskman.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,11 +20,13 @@ public class User {
 
     @Column(unique = true)
     public String email;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String password;
 
     @CreationTimestamp
     public LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore()
     private List<Task> tasks;
 }

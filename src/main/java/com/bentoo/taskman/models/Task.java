@@ -1,14 +1,17 @@
 package com.bentoo.taskman.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity(name = "tb_tasks")
-@Data
+@Getter
+@Setter
 public class Task {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -21,7 +24,8 @@ public class Task {
     public LocalDateTime endAt;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "userId",nullable = false)
+    @JsonIgnore()
     public User user;
 
     @CreationTimestamp

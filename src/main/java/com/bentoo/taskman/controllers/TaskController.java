@@ -1,39 +1,26 @@
 package com.bentoo.taskman.controllers;
-import at.favre.lib.crypto.bcrypt.BCrypt;
-import com.bentoo.taskman.dto.UserDTO;
-import com.bentoo.taskman.models.User;
-import com.bentoo.taskman.repositories.IUserRepository;
+
+import com.bentoo.taskman.dto.TaskDTO;
+import com.bentoo.taskman.models.Task;
+import com.bentoo.taskman.repositories.ITaskRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
-public class TaskController{
+@RequestMapping("/task")
+public class TaskController {
 
     @Autowired
-    IUserRepository userRepository;
+    ITaskRepository taskRepository;
     ModelMapper mapper = new ModelMapper();
 
     @PostMapping
-    public ResponseEntity Create(@RequestBody UserDTO body) {
-        var data = mapper.map(body, User.class);
-        System.out.println("Mapper: "+data.email);
-        var userExists = userRepository.findByEmail(data.email);
-        if (userExists != null) {
-            return ResponseEntity.badRequest().body("User already exists");
-        }
-        String hashPassword = BCrypt.withDefaults().hashToString(10,data.password.toCharArray());
-        data.password = hashPassword;
-        User result = userRepository.save(data);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().build().toUri();
-        return ResponseEntity.created(uri).body(result);
+    public ResponseEntity Create(@RequestBody TaskDTO body){
+        var response = mapper.map(body, Task.class);
+        var result = taskRepository.save(response);
+        System.out.println(result);
+        return  ResponseEntity.ok().body("Created");
     }
 }
