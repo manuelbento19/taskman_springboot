@@ -1,9 +1,11 @@
 package com.bentoo.taskman.utils;
 
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -26,5 +28,10 @@ public class Utils {
 
         String[] fields = nullsProperties.toArray(new String[] {});
         BeanUtils.copyProperties(source,destination,fields);
+    }
+
+    @Bean
+    public ModelMapper mapper(){
+        return new ModelMapper();
     }
 }

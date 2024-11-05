@@ -19,8 +19,9 @@ import java.net.URI;
 public class UserController {
 
     @Autowired
-    IUserRepository userRepository;
-    ModelMapper mapper = new ModelMapper();
+    private IUserRepository userRepository;
+    @Autowired
+    private ModelMapper mapper;
 
     @PostMapping
     public ResponseEntity Create(@RequestBody UserDTO body) {

@@ -20,8 +20,10 @@ import java.util.UUID;
 public class TaskController {
 
     @Autowired
-    ITaskRepository taskRepository;
-    ModelMapper mapper = new ModelMapper();
+    private ITaskRepository taskRepository;
+    @Autowired
+    private ModelMapper mapper;
+
     @Autowired
     Utils utils;
 
