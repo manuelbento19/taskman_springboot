@@ -20,7 +20,7 @@ public class Task {
     @Column(length = 80)
     private String title;
     private String description;
-    private LocalDateTime startedAt;
+    private LocalDateTime startAt;
     private LocalDateTime endAt;
 
     @ManyToOne
