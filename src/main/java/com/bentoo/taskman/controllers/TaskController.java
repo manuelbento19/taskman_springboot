@@ -1,6 +1,7 @@
 package com.bentoo.taskman.controllers;
 import com.bentoo.taskman.dto.TaskDTO;
 import com.bentoo.taskman.models.Task;
+import com.bentoo.taskman.models.User;
 import com.bentoo.taskman.repositories.ITaskRepository;
 import jakarta.servlet.ServletRequest;
 import org.modelmapper.ModelMapper;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,7 +24,8 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity Create(@RequestBody TaskDTO body, ServletRequest request){
-        body.setUserId((UUID) request.getAttribute("userId"));
+        UUID userId = (UUID) request.getAttribute("userId");
+        body.setUserId(userId);
         var response = mapper.map(body, Task.class);
 
         var currentDate = LocalDateTime.now();
@@ -33,5 +36,12 @@ public class TaskController {
 
         var result = taskRepository.save(response);
         return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequestUri().build().toUri()).body(result);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Task>> getTasks(ServletRequest request){
+        UUID userId = (UUID) request.getAttribute("userId");
+        var response = taskRepository.findAllByUserId(userId);
+        return ResponseEntity.ok().body(response);
     }
 }
