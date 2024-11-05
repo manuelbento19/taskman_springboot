@@ -1,9 +1,9 @@
 package com.bentoo.taskman.controllers;
 import com.bentoo.taskman.dto.TaskDTO;
 import com.bentoo.taskman.models.Task;
-import com.bentoo.taskman.models.User;
 import com.bentoo.taskman.repositories.ITaskRepository;
 import jakarta.servlet.ServletRequest;
+import jakarta.websocket.MessageHandler.Partial;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +39,18 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Task>> getTasks(ServletRequest request){
+    public ResponseEntity<List<Task>> GetTasks(ServletRequest request){
         UUID userId = (UUID) request.getAttribute("userId");
         var response = taskRepository.findAllByUserId(userId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Task> Update(@RequestBody TaskDTO body, @PathVariable UUID id, ServletRequest request){
+        UUID userId = (UUID) request.getAttribute("userId");
+        body.setUserId(userId);
+        var data = mapper.map(body, Task.class);
+        var response = taskRepository.save(data);
         return ResponseEntity.ok().body(response);
     }
 }

@@ -22,7 +22,7 @@ public class AuthMiddleware extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
-        if(path.equals("/task")){
+        if(path.startsWith("/task")){
             String authorizationHeader = request.getHeader("Authorization");
             if(authorizationHeader==null){
                 response.sendError(401);
