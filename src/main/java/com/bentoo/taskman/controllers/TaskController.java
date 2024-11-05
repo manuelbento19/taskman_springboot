@@ -1,9 +1,7 @@
 package com.bentoo.taskman.controllers;
-
 import com.bentoo.taskman.dto.TaskDTO;
 import com.bentoo.taskman.models.Task;
 import com.bentoo.taskman.repositories.ITaskRepository;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +20,9 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity Create(@RequestBody TaskDTO body, ServletRequest request){
-        body.userId = (UUID) request.getAttribute("userId");
+        body.setUserId((UUID) request.getAttribute("userId"));
         var response = mapper.map(body, Task.class);
         var result = taskRepository.save(response);
-        System.out.println(result);
         return  ResponseEntity.ok().body("Created");
     }
 }

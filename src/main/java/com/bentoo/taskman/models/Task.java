@@ -15,21 +15,19 @@ import java.util.UUID;
 public class Task {
     @Id
     @GeneratedValue(generator = "UUID")
-    public UUID id;
+    private UUID id;
 
     @Column(length = 80)
-    public String title;
-    public String description;
-    public LocalDateTime startedAt;
-    public LocalDateTime endAt;
+    private String title;
+    private String description;
+    private LocalDateTime startedAt;
+    private LocalDateTime endAt;
 
     @ManyToOne
     @JoinColumn(name = "userId",nullable = false)
     @JsonIgnore()
-    public User user;
+    private User user;
 
     @CreationTimestamp
-    public LocalDateTime createdAt;
-
-
+    private LocalDateTime createdAt;
 }

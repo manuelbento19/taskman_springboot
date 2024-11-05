@@ -1,15 +1,16 @@
 package com.bentoo.taskman.dto;
 
-import lombok.Data;
-
+import lombok.Getter;
+import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 public class TaskDTO {
     private String title;
     private String description;
     private LocalDateTime startedAt;
     private LocalDateTime endAt;
-    public UUID userId;
+    private UUID userId;
 }

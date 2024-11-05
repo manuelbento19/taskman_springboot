@@ -53,12 +53,12 @@ public class AuthMiddleware extends OncePerRequestFilter {
                 return;
             }
 
-            var compare = BCrypt.verifyer().verify(password.toCharArray(),userExists.password.toCharArray());
+            var compare = BCrypt.verifyer().verify(password.toCharArray(),userExists.getPassword().toCharArray());
             if(!compare.verified){
                 response.sendError(401,"User doesn't exists");
                 return;
             }
-            request.setAttribute("userId",userExists.id);
+            request.setAttribute("userId",userExists.getId());
             filterChain.doFilter(request,response);
         }
         filterChain.doFilter(request,response);

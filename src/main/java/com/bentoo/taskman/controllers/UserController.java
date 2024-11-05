@@ -25,13 +25,12 @@ public class UserController {
     @PostMapping
     public ResponseEntity Create(@RequestBody UserDTO body) {
         var data = mapper.map(body, User.class);
-        System.out.println("Mapper: "+data.email);
-        var userExists = userRepository.findByEmail(data.email);
+        var userExists = userRepository.findByEmail(data.getEmail());
         if (userExists != null) {
             return ResponseEntity.badRequest().body("User already exists");
         }
-        String hashPassword = BCrypt.withDefaults().hashToString(10,data.password.toCharArray());
-        data.password = hashPassword;
+        String hashPassword = BCrypt.withDefaults().hashToString(10,data.getPassword().toCharArray());
+        data.setPassword(hashPassword);
         User result = userRepository.save(data);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().build().toUri();
         return ResponseEntity.created(uri).body(result);

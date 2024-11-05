@@ -14,17 +14,17 @@ import java.util.UUID;
 public class User {
     @Id
     @GeneratedValue(generator = "UUID")
-    public UUID id;
+    private UUID id;
 
-    public String name;
+    private String name;
 
     @Column(unique = true)
-    public String email;
+    private String email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public String password;
+    private String password;
 
     @CreationTimestamp
-    public LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore()

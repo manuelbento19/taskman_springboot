@@ -1,10 +1,8 @@
 package com.bentoo.taskman.dto;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 public class UserDTO {
     private String name;
     private String email;
