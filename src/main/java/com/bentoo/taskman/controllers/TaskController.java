@@ -2,9 +2,10 @@ package com.bentoo.taskman.controllers;
 import com.bentoo.taskman.dto.TaskDTO;
 import com.bentoo.taskman.models.Task;
 import com.bentoo.taskman.repositories.ITaskRepository;
+import com.bentoo.taskman.utils.Utils;
 import jakarta.servlet.ServletRequest;
-import jakarta.websocket.MessageHandler.Partial;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,8 @@ public class TaskController {
     @Autowired
     ITaskRepository taskRepository;
     ModelMapper mapper = new ModelMapper();
+    @Autowired
+    Utils utils;
 
     @PostMapping
     public ResponseEntity Create(@RequestBody TaskDTO body, ServletRequest request){
@@ -38,19 +41,17 @@ public class TaskController {
         return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequestUri().build().toUri()).body(result);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Task>> GetTasks(ServletRequest request){
+    @GetMapping()
+    public List<Task> GetTasks(ServletRequest request){
         UUID userId = (UUID) request.getAttribute("userId");
-        var response = taskRepository.findAllByUserId(userId);
-        return ResponseEntity.ok().body(response);
+        return taskRepository.findAllByUserId(userId);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Task> Update(@RequestBody TaskDTO body, @PathVariable UUID id, ServletRequest request){
-        UUID userId = (UUID) request.getAttribute("userId");
-        body.setUserId(userId);
-        var data = mapper.map(body, Task.class);
-        var response = taskRepository.save(data);
+        var taskExists = taskRepository.findById(id).orElseThrow();
+        utils.copyNonNullProperties(body,taskExists);
+        var response = taskRepository.save(taskExists);
         return ResponseEntity.ok().body(response);
     }
 }

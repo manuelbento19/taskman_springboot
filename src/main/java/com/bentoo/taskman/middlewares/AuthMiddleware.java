@@ -60,6 +60,7 @@ public class AuthMiddleware extends OncePerRequestFilter {
             }
             request.setAttribute("userId",userExists.getId());
             filterChain.doFilter(request,response);
+            return;
         }
         filterChain.doFilter(request,response);
     }
