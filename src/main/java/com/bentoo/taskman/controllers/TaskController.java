@@ -3,10 +3,8 @@ import com.bentoo.taskman.dto.TaskDTO;
 import com.bentoo.taskman.models.Task;
 import com.bentoo.taskman.repositories.ITaskRepository;
 import com.bentoo.taskman.utils.Utils;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletRequest;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,9 +50,14 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public ResponseEntity Update(@RequestBody TaskDTO body, @PathVariable UUID id, ServletRequest request){
+        UUID userId = (UUID) request.getAttribute("userId");
         var taskExists = taskRepository.findById(id);
         if(taskExists.isEmpty())
             return ResponseEntity.badRequest().body("Task doesn't exists");
+
+        var task = taskExists.get();
+        if(!task.getUser().getId().equals(userId))
+            return ResponseEntity.badRequest().body("You don't have permission to update this task");
 
         utils.copyNonNullProperties(body,taskExists.get());
         var response = taskRepository.save(taskExists.get());
