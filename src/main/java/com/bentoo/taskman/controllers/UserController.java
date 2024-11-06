@@ -1,8 +1,7 @@
 package com.bentoo.taskman.controllers;
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.bentoo.taskman.dto.UserDTO;
 import com.bentoo.taskman.models.User;
-import com.bentoo.taskman.repositories.IUserRepository;
+import com.bentoo.taskman.services.IUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,20 +18,14 @@ import java.net.URI;
 public class UserController {
 
     @Autowired
-    private IUserRepository userRepository;
+    IUserService userService;
     @Autowired
     private ModelMapper mapper;
 
     @PostMapping
-    public ResponseEntity Create(@RequestBody UserDTO body) {
+    public ResponseEntity Create(@RequestBody UserDTO body) throws Exception{
         var data = mapper.map(body, User.class);
-        var userExists = userRepository.findByEmail(data.getEmail());
-        if (userExists != null) {
-            return ResponseEntity.badRequest().body("User already exists");
-        }
-        String hashPassword = BCrypt.withDefaults().hashToString(10,data.getPassword().toCharArray());
-        data.setPassword(hashPassword);
-        User result = userRepository.save(data);
+        User result = userService.Create(data);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().build().toUri();
         return ResponseEntity.created(uri).body(result);
     }
