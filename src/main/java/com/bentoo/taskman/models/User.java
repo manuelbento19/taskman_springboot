@@ -2,14 +2,16 @@ package com.bentoo.taskman.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Entity(name="tb_users")
 public class User {
     @Id
